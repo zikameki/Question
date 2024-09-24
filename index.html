@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Question</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f8ff;
+            text-align: center;
+            padding-top: 50px;
+        }
+        .question-box, .video-box {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            display: inline-block;
+            width: 300px;
+        }
+        .question {
+            font-size: 20px;
+            margin-bottom: 20px;
+        }
+        .options {
+            text-align: left;
+            margin-bottom: 20px;
+        }
+        .options label {
+            display: block;
+            margin: 10px 0;
+        }
+        button {
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        .feedback {
+            margin-top: 20px;
+            font-size: 16px;
+            color: #FF00FF;
+        }
+        .video-box {
+            margin-top: 20px;
+        }
+        video {
+            width: 100%;
+            border-radius: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="question-box" id="quizBox">
+        <div class="question" id="questionText"></div>
+        <div class="options">
+            <label><input type="radio" name="option" value="a"> <span id="optionA"></span></label>
+            <label><input type="radio" name="option" value="b"> <span id="optionB"></span></label>
+            <label><input type="radio" name="option" value="c"> <span id="optionC"></span></label>
+            <label><input type="radio" name="option" value="d"> <span id="optionD"></span></label>
+        </div>
+        <button onclick="checkAnswer()">Next</button>
+        <div class="feedback" id="feedback"></div>
+    </div>
+
+    <div class="video-box" id="videoBox" style="display: none;">
+        <h3>🚬</h3>
+        <video controls>
+            <source src="video.mp4" type="video/mp4">
+            Browser Anda tidak mendukung video tag ini.
+        </video>
+    </div>
+
+    <script>
+        const questions = [
+            {
+                question: 'Mlbb tanpa dark sistem?',
+                options: {a: 'Public kroco', b: 'Saber Roam', c: 'teman poke', d: 'nabrak penjoki'},
+                correct: 'b',
+                explanation: 'B,Saber Roam soale lemah lek Tim Fight'
+            },
+            {
+                question: 'it doesn`t matter',
+                options: {a: 'Gak masalah kok', b: 'Santai aja lagi', c: 'Aku gak mikir gitu', d: 'Cuma bercanda'},
+                correct: 'a',
+                explanation: 'jawaban yang benar adalah A (gak masalah kok)'
+            },
+            {
+                question: 'Apa yang diprioritaskan orang dahulu?',
+                options: {a: 'Ilmu', b: 'Agama', c: 'Keturunan', d: 'Adab'},
+                correct: 'd',
+                explanation: 'd,Adab merupakan akhlak yang mulia'
+            },
+            {
+                question: 'Komputer= CPU, manusia?',
+                options: {a: 'Liver', b: 'Jantung', c: 'Otak', d: 'Saraf'},
+                correct: 'c',
+                explanation: 'C,komputer=CPU Manusia=otak'
+            }
+        ];
+
+        let currentQuestionIndex = 0;
+
+        function loadQuestion() {
+            const currentQuestion = questions[currentQuestionIndex];
+            document.getElementById('questionText').textContent = currentQuestion.question;
+            document.getElementById('optionA').textContent = currentQuestion.options.a;
+            document.getElementById('optionB').textContent = currentQuestion.options.b;
+            document.getElementById('optionC').textContent = currentQuestion.options.c;
+            document.getElementById('optionD').textContent = currentQuestion.options.d;
+            document.getElementById('feedback').textContent = ''; // Clear feedback
+            document.querySelectorAll('input[name="option"]').forEach(input => input.checked = false);
+        }
+
+        function checkAnswer() {
+            const selectedOption = document.querySelector('input[name="option"]:checked');
+            if (selectedOption) {
+                const answer = selectedOption.value;
+                const currentQuestion = questions[currentQuestionIndex];
+                if (answer === currentQuestion.correct) {
+                    document.getElementById('feedback').textContent = 'correct!';
+                } else {
+                    document.getElementById('feedback').textContent = `incorrect. ${currentQuestion.explanation}`;
+                }
+                currentQuestionIndex++;
+                if (currentQuestionIndex < questions.length) {
+                    setTimeout(loadQuestion, 2000); // Load next question after 2 seconds
+                } else {
+                    setTimeout(showVideo, 2000); // Show video after answering all questions
+                }
+            } else {
+                document.getElementById('feedback').textContent = 'Pilih jawaban terlebih dahulu!';
+            }
+        }
+
+        function showVideo() {
+            document.getElementById('quizBox').style.display = 'none'; // Hide quiz box
+            document.getElementById('videoBox').style.display = 'block'; // Show video box
+        }
+
+        // Load the first question when the page loads
+        window.onload = loadQuestion;
+    </script>
+</body>
+</html>
